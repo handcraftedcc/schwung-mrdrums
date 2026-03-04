@@ -25,11 +25,11 @@ const GLOBAL_CONTROLS = [
 const PAD_MAIN_CONTROLS = [
     { suffix: 'sample_path', label: 'Sample', type: 'filepath' },
     { suffix: 'vol', label: 'Vol', type: 'float', min: 0.0, max: 1.0, step: 0.01, fineStep: 0.005 },
-    { suffix: 'pan', label: 'Pan', type: 'float', min: -1.0, max: 1.0, step: 0.01, fineStep: 0.005 },
-    { suffix: 'tune', label: 'Tune', type: 'float', min: -24.0, max: 24.0, step: 0.1, fineStep: 0.01 },
-    { suffix: 'start', label: 'Start', type: 'float', min: 0.0, max: 1.0, step: 0.001, fineStep: 0.0005 },
+    { suffix: 'pan', label: 'Pan', type: 'float', min: -1.0, max: 1.0, step: 0.1, fineStep: 0.05 },
+    { suffix: 'tune', label: 'Tune', type: 'float', min: -24.0, max: 24.0, step: 1.0, fineStep: 0.5 },
+    { suffix: 'start', label: 'Start', type: 'float', min: 0.0, max: 1.0, step: 0.01, fineStep: 0.005 },
     { suffix: 'attack_ms', label: 'Attack', type: 'float', min: 0.0, max: 5000.0, step: 1.0, fineStep: 0.5 },
-    { suffix: 'decay_ms', label: 'Decay', type: 'float', min: 0.0, max: 5000.0, step: 1.0, fineStep: 0.5 },
+    { suffix: 'decay_ms', label: 'Decay', type: 'float', min: 0.0, max: 5000.0, step: 5.0, fineStep: 1.0 },
     { suffix: 'choke_group', label: 'Choke', type: 'int', min: 0, max: 16, step: 1, fineStep: 1 },
     { suffix: 'mode', label: 'Mode', type: 'enum', options: ['gate', 'oneshot'] },
 ];
@@ -63,6 +63,12 @@ function decodeDelta(value) {
     return value;
 }
 
+function encoderIndexForCc(cc) {
+    if (cc >= 14 && cc <= 21) return cc - 14;
+    if (cc >= 71 && cc <= 78) return cc - 71;
+    return -1;
+}
+
 function getParamRaw(key) {
     if (typeof host_module_get_param !== 'function') return '';
     const val = host_module_get_param(key);
@@ -93,14 +99,12 @@ function getPadControls() {
     return state.padControlPage === PAD_PAGE_MAIN ? PAD_MAIN_CONTROLS : PAD_RANDOM_CONTROLS;
 }
 
-function resolveFileBrowserStartDir(key) {
-    const currentPath = getParamRaw(key);
-    if (currentPath) return currentPath;
-
-    const lastPath = getParamRaw('ui_last_sample_dir');
-    if (lastPath) return lastPath;
-
-    return '/data/UserData/UserLibrary/Samples';
+function openSampleFileBrowser() {
+    /* Use dynamic alias so browser metadata (root/start/filter/start_path) comes from chain_params. */
+    setParamRaw('ui_current_pad', state.currentPad);
+    if (typeof host_open_file_browser === 'function') {
+        host_open_file_browser('pad_sample_path');
+    }
 }
 
 function formatValue(control, raw) {
@@ -123,11 +127,10 @@ function adjustControl(control, key, delta) {
     if (delta === 0) return;
 
     if (control.type === 'filepath') {
-        if (delta > 0 && typeof host_open_file_browser === 'function') {
-            host_open_file_browser(key, '.wav', resolveFileBrowserStartDir(key));
-        }
+        if (delta > 0) openSampleFileBrowser();
         if (delta < 0) {
-            setParamRaw(key, '');
+            setParamRaw('ui_current_pad', state.currentPad);
+            setParamRaw('pad_sample_path', '');
         }
         return;
     }
@@ -187,7 +190,7 @@ function switchPadSubPage() {
 }
 
 function handleEncoder(cc, value) {
-    const idx = cc - 14;
+    const idx = encoderIndexForCc(cc);
     if (idx < 0 || idx > 7) return;
 
     const delta = decodeDelta(value);

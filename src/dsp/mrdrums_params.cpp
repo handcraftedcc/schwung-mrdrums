@@ -14,13 +14,13 @@ static const mrdrums_param_desc_t kGlobalParams[] = {
 };
 
 static const mrdrums_pad_field_desc_t kPadFields[] = {
-    {"sample_path", "Sample", "filepath", 0.0f, 0.0f, 0.0f, 0.0f, "", NULL, "/data/UserData", ".wav", "/data/UserData/UserLibrary/Samples"},
+    {"sample_path", "Sample", "filepath", 0.0f, 0.0f, 0.0f, 0.0f, "", NULL, "/data/UserData/UserLibrary/Samples", ".wav", "/data/UserData/UserLibrary/Samples"},
     {"vol", "Vol", "float", 0.0f, 1.0f, 0.01f, 1.0f, NULL, NULL, NULL, NULL, NULL},
-    {"pan", "Pan", "float", -1.0f, 1.0f, 0.01f, 0.0f, NULL, NULL, NULL, NULL, NULL},
-    {"tune", "Tune", "float", -24.0f, 24.0f, 0.01f, 0.0f, NULL, NULL, NULL, NULL, NULL},
-    {"start", "Start", "float", 0.0f, 1.0f, 0.001f, 0.0f, NULL, NULL, NULL, NULL, NULL},
+    {"pan", "Pan", "float", -1.0f, 1.0f, 0.1f, 0.0f, NULL, NULL, NULL, NULL, NULL},
+    {"tune", "Tune", "float", -24.0f, 24.0f, 1.0f, 0.0f, NULL, NULL, NULL, NULL, NULL},
+    {"start", "Start", "float", 0.0f, 1.0f, 0.01f, 0.0f, NULL, NULL, NULL, NULL, NULL},
     {"attack_ms", "Attack", "float", 0.0f, 5000.0f, 1.0f, 0.0f, NULL, NULL, NULL, NULL, NULL},
-    {"decay_ms", "Decay", "float", 0.0f, 5000.0f, 1.0f, 250.0f, NULL, NULL, NULL, NULL, NULL},
+    {"decay_ms", "Decay", "float", 0.0f, 5000.0f, 5.0f, 250.0f, NULL, NULL, NULL, NULL, NULL},
     {"choke_group", "Choke", "int", 0.0f, 16.0f, 1.0f, 0.0f, NULL, NULL, NULL, NULL, NULL},
     {"mode", "Mode", "enum", 0.0f, 0.0f, 0.0f, 0.0f, "oneshot", "[\"gate\",\"oneshot\"]", NULL, NULL, NULL},
     {"rand_pan_amt", "Rand Pan", "float", 0.0f, 1.0f, 0.01f, 0.0f, NULL, NULL, NULL, NULL, NULL},

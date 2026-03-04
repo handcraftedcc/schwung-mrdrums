@@ -26,6 +26,19 @@ int main() {
     if (!pad) return fail("missing p07_tune descriptor");
     if (pad->pad_index != 7) return fail("pad_index expected 7");
     if (std::strcmp(pad->suffix, "tune") != 0) return fail("suffix expected tune");
+    if (pad->step != 1.0f) return fail("tune step expected 1.0");
+
+    const mrdrums_param_desc_t *pan = mrdrums_find_pad_param("p01_pan");
+    if (!pan) return fail("missing p01_pan descriptor");
+    if (pan->step != 0.1f) return fail("pan step expected 0.1");
+
+    const mrdrums_param_desc_t *start = mrdrums_find_pad_param("p01_start");
+    if (!start) return fail("missing p01_start descriptor");
+    if (start->step != 0.01f) return fail("start step expected 0.01");
+
+    const mrdrums_param_desc_t *decay = mrdrums_find_pad_param("p01_decay_ms");
+    if (!decay) return fail("missing p01_decay_ms descriptor");
+    if (decay->step != 5.0f) return fail("decay step expected 5.0");
 
     std::printf("PASS: mrdrums pad key mapping\n");
     return 0;

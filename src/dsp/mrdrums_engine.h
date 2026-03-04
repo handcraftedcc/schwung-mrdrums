@@ -71,6 +71,7 @@ typedef struct {
     int vel_curve;
     float humanize_ms;
     uint32_t rand_seed;
+    uint32_t rng_state;
     int rand_loop_steps;
 
     mrdrums_pad_t pads[MRDRUMS_ENGINE_PAD_COUNT];

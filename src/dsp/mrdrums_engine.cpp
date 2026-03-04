@@ -58,6 +58,7 @@ void mrdrums_engine_init(mrdrums_engine_t *engine) {
     engine->vel_curve = 0;
     engine->humanize_ms = 0.0f;
     engine->rand_seed = 1u;
+    engine->rng_state = engine->rand_seed;
     engine->rand_loop_steps = 16;
 
     for (int i = 0; i < MRDRUMS_ENGINE_PAD_COUNT; i++) {
@@ -220,7 +221,7 @@ void mrdrums_engine_note_on(mrdrums_engine_t *engine, int note, int velocity) {
     const mrdrums_pad_t *pad = get_pad(engine, pad_index);
     if (!pad || !pad->sample_data || pad->sample_len < 2) return;
 
-    uint32_t rng = engine->rand_seed ? engine->rand_seed : 1u;
+    uint32_t rng = engine->rng_state ? engine->rng_state : (engine->rand_seed ? engine->rand_seed : 1u);
     float chance_roll = rand01(&rng) * 100.0f;
     if (chance_roll > clampf(pad->chance_pct, 0.0f, 100.0f)) return;
 
@@ -289,7 +290,7 @@ void mrdrums_engine_note_on(mrdrums_engine_t *engine, int note, int velocity) {
         v->release_inc = 1.0f / release_samples;
     }
 
-    engine->rand_seed = rng;
+    engine->rng_state = rng;
 }
 
 void mrdrums_engine_note_off(mrdrums_engine_t *engine, int note) {
@@ -353,6 +354,11 @@ void mrdrums_engine_render(mrdrums_engine_t *engine, float *out_left, float *out
             if (v->env < 1.0f && v->attack_inc > 0.0f && !v->releasing) {
                 v->env += v->attack_inc;
                 if (v->env > 1.0f) v->env = 1.0f;
+            }
+
+            /* Oneshot uses decay as an automatic release envelope after attack. */
+            if (v->mode == MRDRUMS_PAD_MODE_ONESHOT && !v->releasing && v->env >= 1.0f) {
+                v->releasing = 1;
             }
 
             if (v->releasing) {

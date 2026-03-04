@@ -53,9 +53,13 @@ int main() {
         api->destroy_instance(inst);
         return fail("pad_sample_path metadata missing");
     }
-    if (!std::strstr(chain_params, "\"root\":\"/data/UserData\"")) {
+    if (std::strstr(chain_params, "\"name\":\"Current Sample\"")) {
         api->destroy_instance(inst);
-        return fail("filepath root not set to /data/UserData");
+        return fail("pad_sample_path label should not use Current prefix");
+    }
+    if (!std::strstr(chain_params, "\"root\":\"/data/UserData/UserLibrary/Samples\"")) {
+        api->destroy_instance(inst);
+        return fail("filepath root not set to /data/UserData/UserLibrary/Samples");
     }
     if (!std::strstr(chain_params, "\"start_path\":\"/data/UserData/UserLibrary/Samples\"")) {
         api->destroy_instance(inst);

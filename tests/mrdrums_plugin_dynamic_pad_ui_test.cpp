@@ -46,6 +46,19 @@ static int expect_ui_pad_key(plugin_api_v2_t *api, void *inst, const char *want_
     return 0;
 }
 
+static int expect_ui_hierarchy_contains(plugin_api_v2_t *api, void *inst, const char *needle) {
+    char hier[4096];
+    std::memset(hier, 0, sizeof(hier));
+    if (api->get_param(inst, "ui_hierarchy", hier, (int)sizeof(hier)) < 0) {
+        return fail("get_param(ui_hierarchy) failed");
+    }
+    if (!std::strstr(hier, needle)) {
+        std::fprintf(stderr, "FAIL: expected ui_hierarchy to contain %s\n", needle);
+        return 1;
+    }
+    return 0;
+}
+
 int main() {
     plugin_api_v2_t *api = move_plugin_init_v2(NULL);
     if (!api || !api->create_instance || !api->set_param || !api->get_param || !api->on_midi || !api->destroy_instance) {
@@ -57,6 +70,18 @@ int main() {
 
     api->set_param(inst, "ui_current_pad", "6");
     if (expect_ui_pad_key(api, inst, "pad_pan") != 0) {
+        api->destroy_instance(inst);
+        return 1;
+    }
+    if (expect_ui_hierarchy_contains(api, inst, "\"global\":{\"name\":\"Global\",\"params\":[\"g_master_vol\",\"g_polyphony\",\"g_vel_curve\",\"g_humanize_ms\",\"g_rand_seed\",\"g_rand_loop_steps\"],\"knobs\":[\"g_master_vol\",\"g_polyphony\",\"g_vel_curve\",\"g_humanize_ms\",\"g_rand_seed\",\"g_rand_loop_steps\"]}") != 0) {
+        api->destroy_instance(inst);
+        return 1;
+    }
+    if (expect_ui_hierarchy_contains(api, inst, "\"root\":{\"name\":\"mrdrums\",\"params\":[{\"label\":\"Global\",\"level\":\"global\"},{\"label\":\"Pad Settings\",\"level\":\"pad_settings\"}],\"knobs\":[\"pad_vol\",\"pad_pan\",\"pad_tune\",\"pad_start\",\"pad_attack_ms\",\"pad_decay_ms\",\"pad_choke_group\",\"pad_mode\"]}") != 0) {
+        api->destroy_instance(inst);
+        return 1;
+    }
+    if (expect_ui_hierarchy_contains(api, inst, "\"knobs\":[\"pad_vol\",\"pad_pan\",\"pad_tune\",\"pad_start\",\"pad_attack_ms\",\"pad_decay_ms\",\"pad_choke_group\",\"pad_mode\"]") != 0) {
         api->destroy_instance(inst);
         return 1;
     }

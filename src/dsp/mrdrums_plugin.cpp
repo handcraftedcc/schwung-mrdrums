@@ -481,6 +481,7 @@ static int set_param_value(mrdrums_instance_t *inst, const char *key, const char
         unsigned long s = strtoul(val, NULL, 10);
         inst->engine.rand_seed = (uint32_t)s;
         if (!inst->engine.rand_seed) inst->engine.rand_seed = 1u;
+        inst->engine.rng_state = inst->engine.rand_seed;
         return 1;
     }
     if (strcmp(key, "g_rand_loop_steps") == 0) {
@@ -879,23 +880,23 @@ static int build_chain_params_json(mrdrums_instance_t *inst, char *buf, int buf_
                 : (f->start_path ? f->start_path : "/data/UserData/UserLibrary/Samples");
             if (effective_start_path && effective_start_path[0]) {
                 offset += snprintf(buf + offset, buf_len - offset,
-                                   "{\"key\":\"%s\",\"name\":\"Current %s\",\"type\":\"filepath\",\"root\":\"%s\",\"start_path\":\"%s\",\"filter\":\"%s\"}",
+                                   "{\"key\":\"%s\",\"name\":\"%s\",\"type\":\"filepath\",\"root\":\"%s\",\"start_path\":\"%s\",\"filter\":\"%s\"}",
                                    key,
                                    f->name,
-                                   f->root ? f->root : "/data/UserData",
+                                   f->root ? f->root : "/data/UserData/UserLibrary/Samples",
                                    effective_start_path,
                                    f->filter ? f->filter : ".wav");
             } else {
                 offset += snprintf(buf + offset, buf_len - offset,
-                                   "{\"key\":\"%s\",\"name\":\"Current %s\",\"type\":\"filepath\",\"root\":\"%s\",\"filter\":\"%s\"}",
+                                   "{\"key\":\"%s\",\"name\":\"%s\",\"type\":\"filepath\",\"root\":\"%s\",\"filter\":\"%s\"}",
                                    key,
                                    f->name,
-                                   f->root ? f->root : "/data/UserData",
+                                   f->root ? f->root : "/data/UserData/UserLibrary/Samples",
                                    f->filter ? f->filter : ".wav");
             }
         } else if (strcmp(f->type, "enum") == 0) {
             offset += snprintf(buf + offset, buf_len - offset,
-                               "{\"key\":\"%s\",\"name\":\"Current %s\",\"type\":\"enum\",\"options\":%s,\"default\":\"%s\"}",
+                               "{\"key\":\"%s\",\"name\":\"%s\",\"type\":\"enum\",\"options\":%s,\"default\":\"%s\"}",
                                key,
                                f->name,
                                f->options_json ? f->options_json : "[]",
@@ -903,7 +904,7 @@ static int build_chain_params_json(mrdrums_instance_t *inst, char *buf, int buf_
         } else {
             const char *type = strcmp(f->type, "int") == 0 ? "int" : "float";
             offset += snprintf(buf + offset, buf_len - offset,
-                               "{\"key\":\"%s\",\"name\":\"Current %s\",\"type\":\"%s\",\"min\":%g,\"max\":%g,\"step\":%g}",
+                               "{\"key\":\"%s\",\"name\":\"%s\",\"type\":\"%s\",\"min\":%g,\"max\":%g,\"step\":%g}",
                                key,
                                f->name,
                                type,
@@ -934,7 +935,7 @@ static int build_chain_params_json(mrdrums_instance_t *inst, char *buf, int buf_
                                        "{\"key\":\"%s\",\"name\":\"%s\",\"type\":\"filepath\",\"root\":\"%s\",\"start_path\":\"%s\",\"filter\":\"%s\"}",
                                        key,
                                        name,
-                                       f->root ? f->root : "/data/UserData",
+                                       f->root ? f->root : "/data/UserData/UserLibrary/Samples",
                                        effective_start_path,
                                        f->filter ? f->filter : ".wav");
                 } else {
@@ -942,7 +943,7 @@ static int build_chain_params_json(mrdrums_instance_t *inst, char *buf, int buf_
                                        "{\"key\":\"%s\",\"name\":\"%s\",\"type\":\"filepath\",\"root\":\"%s\",\"filter\":\"%s\"}",
                                        key,
                                        name,
-                                       f->root ? f->root : "/data/UserData",
+                                       f->root ? f->root : "/data/UserData/UserLibrary/Samples",
                                        f->filter ? f->filter : ".wav");
                 }
             } else if (strcmp(f->type, "enum") == 0) {
@@ -985,15 +986,18 @@ static int build_ui_hierarchy(mrdrums_instance_t *inst, char *buf, int buf_len) 
                     "\"params\":["
                         "{\"label\":\"Global\",\"level\":\"global\"},"
                         "{\"label\":\"Pad Settings\",\"level\":\"pad_settings\"}"
-                    "]"
+                    "],"
+                    "\"knobs\":[\"pad_vol\",\"pad_pan\",\"pad_tune\",\"pad_start\",\"pad_attack_ms\",\"pad_decay_ms\",\"pad_choke_group\",\"pad_mode\"]"
                 "},"
                 "\"global\":{"
                     "\"name\":\"Global\","
-                    "\"params\":[\"g_master_vol\",\"g_polyphony\",\"g_vel_curve\",\"g_humanize_ms\",\"g_rand_seed\",\"g_rand_loop_steps\"]"
+                    "\"params\":[\"g_master_vol\",\"g_polyphony\",\"g_vel_curve\",\"g_humanize_ms\",\"g_rand_seed\",\"g_rand_loop_steps\"],"
+                    "\"knobs\":[\"g_master_vol\",\"g_polyphony\",\"g_vel_curve\",\"g_humanize_ms\",\"g_rand_seed\",\"g_rand_loop_steps\"]"
                 "},"
                 "\"pad_settings\":{"
                     "\"name\":\"Pad Settings\","
-                    "\"params\":[\"ui_current_pad\",\"pad_sample_path\",\"pad_vol\",\"pad_pan\",\"pad_tune\",\"pad_start\",\"pad_attack_ms\",\"pad_decay_ms\",\"pad_choke_group\",\"pad_mode\",\"pad_rand_pan_amt\",\"pad_rand_vol_amt\",\"pad_rand_decay_amt\",\"pad_chance_pct\"]"
+                    "\"params\":[\"ui_current_pad\",\"pad_sample_path\",\"pad_vol\",\"pad_pan\",\"pad_tune\",\"pad_start\",\"pad_attack_ms\",\"pad_decay_ms\",\"pad_choke_group\",\"pad_mode\",\"pad_rand_pan_amt\",\"pad_rand_vol_amt\",\"pad_rand_decay_amt\",\"pad_chance_pct\"],"
+                    "\"knobs\":[\"pad_vol\",\"pad_pan\",\"pad_tune\",\"pad_start\",\"pad_attack_ms\",\"pad_decay_ms\",\"pad_choke_group\",\"pad_mode\"]"
                 "}"
             "}"
         "}"
