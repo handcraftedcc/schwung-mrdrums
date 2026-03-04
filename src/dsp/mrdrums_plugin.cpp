@@ -353,6 +353,10 @@ static int set_pad_sample_path(mrdrums_instance_t *inst, int pad_index, const ch
         return 0;
     }
 
+    if (has_wav_extension(path)) {
+        snprintf(inst->ui_last_sample_dir, sizeof(inst->ui_last_sample_dir), "%s", path);
+    }
+
     if (!has_wav_extension(path)) {
         clear_pad_sample(inst, pad_index);
         set_error(inst, "Selected file must be .wav");
@@ -575,6 +579,14 @@ static int get_param_value(mrdrums_instance_t *inst, const char *key, char *buf,
 
     const char *alias_suffix = resolve_current_pad_alias_suffix(key);
     if (alias_suffix) {
+        if (strcmp(alias_suffix, "sample_path") == 0) {
+            int pad_index = clampi(inst->ui_current_pad, 1, MRDRUMS_ENGINE_PAD_COUNT) - 1;
+            const char *current_path = inst->pad_sample_paths[pad_index];
+            if (current_path[0]) return snprintf(buf, buf_len, "%s", current_path);
+            if (inst->ui_last_sample_dir[0]) return snprintf(buf, buf_len, "%s", inst->ui_last_sample_dir);
+            return snprintf(buf, buf_len, "%s", "");
+        }
+
         char target_key[64];
         if (!mrdrums_make_pad_key(clampi(inst->ui_current_pad, 1, 16), alias_suffix, target_key, sizeof(target_key))) {
             return -1;
@@ -870,12 +882,22 @@ static int build_chain_params_json(char *buf, int buf_len) {
         is_first = 0;
 
         if (strcmp(f->type, "filepath") == 0) {
-            offset += snprintf(buf + offset, buf_len - offset,
-                               "{\"key\":\"%s\",\"name\":\"Current %s\",\"type\":\"filepath\",\"root\":\"%s\",\"filter\":\"%s\"}",
-                               key,
-                               f->name,
-                               f->root ? f->root : "/data/UserData/UserLibrary/Samples",
-                               f->filter ? f->filter : ".wav");
+            if (f->start_path && f->start_path[0]) {
+                offset += snprintf(buf + offset, buf_len - offset,
+                                   "{\"key\":\"%s\",\"name\":\"Current %s\",\"type\":\"filepath\",\"root\":\"%s\",\"start_path\":\"%s\",\"filter\":\"%s\"}",
+                                   key,
+                                   f->name,
+                                   f->root ? f->root : "/data/UserData",
+                                   f->start_path,
+                                   f->filter ? f->filter : ".wav");
+            } else {
+                offset += snprintf(buf + offset, buf_len - offset,
+                                   "{\"key\":\"%s\",\"name\":\"Current %s\",\"type\":\"filepath\",\"root\":\"%s\",\"filter\":\"%s\"}",
+                                   key,
+                                   f->name,
+                                   f->root ? f->root : "/data/UserData",
+                                   f->filter ? f->filter : ".wav");
+            }
         } else if (strcmp(f->type, "enum") == 0) {
             offset += snprintf(buf + offset, buf_len - offset,
                                "{\"key\":\"%s\",\"name\":\"Current %s\",\"type\":\"enum\",\"options\":%s,\"default\":\"%s\"}",
@@ -909,12 +931,22 @@ static int build_chain_params_json(char *buf, int buf_len) {
             is_first = 0;
 
             if (strcmp(f->type, "filepath") == 0) {
-                offset += snprintf(buf + offset, buf_len - offset,
-                                   "{\"key\":\"%s\",\"name\":\"%s\",\"type\":\"filepath\",\"root\":\"%s\",\"filter\":\"%s\"}",
-                                   key,
-                                   name,
-                                   f->root ? f->root : "/data/UserData/UserLibrary/Samples",
-                                   f->filter ? f->filter : ".wav");
+                if (f->start_path && f->start_path[0]) {
+                    offset += snprintf(buf + offset, buf_len - offset,
+                                       "{\"key\":\"%s\",\"name\":\"%s\",\"type\":\"filepath\",\"root\":\"%s\",\"start_path\":\"%s\",\"filter\":\"%s\"}",
+                                       key,
+                                       name,
+                                       f->root ? f->root : "/data/UserData",
+                                       f->start_path,
+                                       f->filter ? f->filter : ".wav");
+                } else {
+                    offset += snprintf(buf + offset, buf_len - offset,
+                                       "{\"key\":\"%s\",\"name\":\"%s\",\"type\":\"filepath\",\"root\":\"%s\",\"filter\":\"%s\"}",
+                                       key,
+                                       name,
+                                       f->root ? f->root : "/data/UserData",
+                                       f->filter ? f->filter : ".wav");
+                }
             } else if (strcmp(f->type, "enum") == 0) {
                 offset += snprintf(buf + offset, buf_len - offset,
                                    "{\"key\":\"%s\",\"name\":\"%s\",\"type\":\"enum\",\"options\":%s,\"default\":\"%s\"}",

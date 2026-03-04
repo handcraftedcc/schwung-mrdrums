@@ -27,6 +27,7 @@ typedef struct {
     const char *options_json;
     const char *root;
     const char *filter;
+    const char *start_path;
 } mrdrums_param_desc_t;
 
 typedef struct {
@@ -41,6 +42,7 @@ typedef struct {
     const char *options_json;
     const char *root;
     const char *filter;
+    const char *start_path;
 } mrdrums_pad_field_desc_t;
 
 int mrdrums_make_pad_key(int pad_index, const char *suffix, char *out, size_t out_len);

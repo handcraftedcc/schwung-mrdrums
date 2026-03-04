@@ -4,29 +4,29 @@
 #include <string.h>
 
 static const mrdrums_param_desc_t kGlobalParams[] = {
-    {"g_master_vol", "Master Vol", "float", NULL, 0, 0.0f, 1.0f, 0.01f, 1.0f, NULL, NULL, NULL, NULL},
-    {"g_polyphony", "Polyphony", "int", NULL, 0, 1.0f, 64.0f, 1.0f, 16.0f, NULL, NULL, NULL, NULL},
-    {"g_vel_curve", "Velocity Curve", "enum", NULL, 0, 0.0f, 0.0f, 0.0f, 0.0f, "linear", "[\"linear\",\"soft\",\"hard\"]", NULL, NULL},
-    {"g_humanize_ms", "Humanize", "float", NULL, 0, 0.0f, 50.0f, 0.1f, 0.0f, NULL, NULL, NULL, NULL},
-    {"g_rand_seed", "Random Seed", "int", NULL, 0, 0.0f, 2147483647.0f, 1.0f, 1.0f, NULL, NULL, NULL, NULL},
-    {"g_rand_loop_steps", "Rand Loop Steps", "int", NULL, 0, 1.0f, 128.0f, 1.0f, 16.0f, NULL, NULL, NULL, NULL},
-    {"ui_current_pad", "Current Pad", "int", NULL, 0, 1.0f, 16.0f, 1.0f, 1.0f, NULL, NULL, NULL, NULL},
+    {"g_master_vol", "Master Vol", "float", NULL, 0, 0.0f, 1.0f, 0.01f, 1.0f, NULL, NULL, NULL, NULL, NULL},
+    {"g_polyphony", "Polyphony", "int", NULL, 0, 1.0f, 64.0f, 1.0f, 16.0f, NULL, NULL, NULL, NULL, NULL},
+    {"g_vel_curve", "Velocity Curve", "enum", NULL, 0, 0.0f, 0.0f, 0.0f, 0.0f, "linear", "[\"linear\",\"soft\",\"hard\"]", NULL, NULL, NULL},
+    {"g_humanize_ms", "Humanize", "float", NULL, 0, 0.0f, 50.0f, 0.1f, 0.0f, NULL, NULL, NULL, NULL, NULL},
+    {"g_rand_seed", "Random Seed", "int", NULL, 0, 0.0f, 2147483647.0f, 1.0f, 1.0f, NULL, NULL, NULL, NULL, NULL},
+    {"g_rand_loop_steps", "Rand Loop Steps", "int", NULL, 0, 1.0f, 128.0f, 1.0f, 16.0f, NULL, NULL, NULL, NULL, NULL},
+    {"ui_current_pad", "Current Pad", "int", NULL, 0, 1.0f, 16.0f, 1.0f, 1.0f, NULL, NULL, NULL, NULL, NULL},
 };
 
 static const mrdrums_pad_field_desc_t kPadFields[] = {
-    {"sample_path", "Sample", "filepath", 0.0f, 0.0f, 0.0f, 0.0f, "", NULL, "/data/UserData/UserLibrary/Samples", ".wav"},
-    {"vol", "Vol", "float", 0.0f, 1.0f, 0.01f, 1.0f, NULL, NULL, NULL, NULL},
-    {"pan", "Pan", "float", -1.0f, 1.0f, 0.01f, 0.0f, NULL, NULL, NULL, NULL},
-    {"tune", "Tune", "float", -24.0f, 24.0f, 0.01f, 0.0f, NULL, NULL, NULL, NULL},
-    {"start", "Start", "float", 0.0f, 1.0f, 0.001f, 0.0f, NULL, NULL, NULL, NULL},
-    {"attack_ms", "Attack", "float", 0.0f, 5000.0f, 1.0f, 0.0f, NULL, NULL, NULL, NULL},
-    {"decay_ms", "Decay", "float", 0.0f, 5000.0f, 1.0f, 250.0f, NULL, NULL, NULL, NULL},
-    {"choke_group", "Choke", "int", 0.0f, 16.0f, 1.0f, 0.0f, NULL, NULL, NULL, NULL},
-    {"mode", "Mode", "enum", 0.0f, 0.0f, 0.0f, 0.0f, "oneshot", "[\"gate\",\"oneshot\"]", NULL, NULL},
-    {"rand_pan_amt", "Rand Pan", "float", 0.0f, 1.0f, 0.01f, 0.0f, NULL, NULL, NULL, NULL},
-    {"rand_vol_amt", "Rand Vol", "float", 0.0f, 1.0f, 0.01f, 0.0f, NULL, NULL, NULL, NULL},
-    {"rand_decay_amt", "Rand Decay", "float", 0.0f, 1.0f, 0.01f, 0.0f, NULL, NULL, NULL, NULL},
-    {"chance_pct", "Chance", "float", 0.0f, 100.0f, 1.0f, 100.0f, NULL, NULL, NULL, NULL},
+    {"sample_path", "Sample", "filepath", 0.0f, 0.0f, 0.0f, 0.0f, "", NULL, "/data/UserData", ".wav", "/data/UserData/UserLibrary/Samples"},
+    {"vol", "Vol", "float", 0.0f, 1.0f, 0.01f, 1.0f, NULL, NULL, NULL, NULL, NULL},
+    {"pan", "Pan", "float", -1.0f, 1.0f, 0.01f, 0.0f, NULL, NULL, NULL, NULL, NULL},
+    {"tune", "Tune", "float", -24.0f, 24.0f, 0.01f, 0.0f, NULL, NULL, NULL, NULL, NULL},
+    {"start", "Start", "float", 0.0f, 1.0f, 0.001f, 0.0f, NULL, NULL, NULL, NULL, NULL},
+    {"attack_ms", "Attack", "float", 0.0f, 5000.0f, 1.0f, 0.0f, NULL, NULL, NULL, NULL, NULL},
+    {"decay_ms", "Decay", "float", 0.0f, 5000.0f, 1.0f, 250.0f, NULL, NULL, NULL, NULL, NULL},
+    {"choke_group", "Choke", "int", 0.0f, 16.0f, 1.0f, 0.0f, NULL, NULL, NULL, NULL, NULL},
+    {"mode", "Mode", "enum", 0.0f, 0.0f, 0.0f, 0.0f, "oneshot", "[\"gate\",\"oneshot\"]", NULL, NULL, NULL},
+    {"rand_pan_amt", "Rand Pan", "float", 0.0f, 1.0f, 0.01f, 0.0f, NULL, NULL, NULL, NULL, NULL},
+    {"rand_vol_amt", "Rand Vol", "float", 0.0f, 1.0f, 0.01f, 0.0f, NULL, NULL, NULL, NULL, NULL},
+    {"rand_decay_amt", "Rand Decay", "float", 0.0f, 1.0f, 0.01f, 0.0f, NULL, NULL, NULL, NULL, NULL},
+    {"chance_pct", "Chance", "float", 0.0f, 100.0f, 1.0f, 100.0f, NULL, NULL, NULL, NULL, NULL},
 };
 
 #define GLOBAL_COUNT ((int)(sizeof(kGlobalParams) / sizeof(kGlobalParams[0])))
@@ -100,6 +100,7 @@ const mrdrums_param_desc_t *mrdrums_find_pad_param(const char *key) {
         scratch.options_json = f->options_json;
         scratch.root = f->root;
         scratch.filter = f->filter;
+        scratch.start_path = f->start_path;
         return &scratch;
     }
 
