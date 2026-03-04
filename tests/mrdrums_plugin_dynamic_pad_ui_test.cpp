@@ -81,6 +81,10 @@ int main() {
         api->destroy_instance(inst);
         return 1;
     }
+    if (expect_ui_hierarchy_contains(api, inst, "\"params\":[\"ui_auto_select_pad\",\"ui_current_pad\",\"pad_sample_path\",\"pad_vol\",\"pad_pan\",\"pad_tune\",\"pad_start\",\"pad_attack_ms\",\"pad_decay_ms\",\"pad_choke_group\",\"pad_mode\",\"pad_rand_pan_amt\",\"pad_rand_vol_amt\",\"pad_rand_decay_amt\",\"pad_chance_pct\"]") != 0) {
+        api->destroy_instance(inst);
+        return 1;
+    }
     if (expect_ui_hierarchy_contains(api, inst, "\"knobs\":[\"pad_vol\",\"pad_pan\",\"pad_tune\",\"pad_start\",\"pad_attack_ms\",\"pad_decay_ms\",\"pad_choke_group\",\"pad_mode\"]") != 0) {
         api->destroy_instance(inst);
         return 1;

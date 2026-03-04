@@ -10,6 +10,7 @@ static const mrdrums_param_desc_t kGlobalParams[] = {
     {"g_humanize_ms", "Humanize", "float", NULL, 0, 0.0f, 50.0f, 0.1f, 0.0f, NULL, NULL, NULL, NULL, NULL},
     {"g_rand_seed", "Random Seed", "int", NULL, 0, 0.0f, 2147483647.0f, 1.0f, 1.0f, NULL, NULL, NULL, NULL, NULL},
     {"g_rand_loop_steps", "Rand Loop Steps", "int", NULL, 0, 1.0f, 128.0f, 1.0f, 16.0f, NULL, NULL, NULL, NULL, NULL},
+    {"ui_auto_select_pad", "Auto Select", "int", NULL, 0, 0.0f, 1.0f, 1.0f, 1.0f, NULL, NULL, NULL, NULL, NULL},
     {"ui_current_pad", "Current Pad", "int", NULL, 0, 1.0f, 16.0f, 1.0f, 1.0f, NULL, NULL, NULL, NULL, NULL},
 };
 

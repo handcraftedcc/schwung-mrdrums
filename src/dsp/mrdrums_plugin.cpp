@@ -70,6 +70,7 @@ typedef struct {
 typedef struct {
     char module_dir[512];
     char last_error[256];
+    int ui_auto_select_pad;
     int ui_current_pad;
     char ui_last_sample_dir[512];
 
@@ -488,6 +489,10 @@ static int set_param_value(mrdrums_instance_t *inst, const char *key, const char
         inst->engine.rand_loop_steps = clampi(atoi(val), 1, 128);
         return 1;
     }
+    if (strcmp(key, "ui_auto_select_pad") == 0) {
+        inst->ui_auto_select_pad = clampi(atoi(val), 0, 1);
+        return 1;
+    }
     if (strcmp(key, "ui_current_pad") == 0) {
         inst->ui_current_pad = clampi(atoi(val), 1, 16);
         return 1;
@@ -575,6 +580,7 @@ static int get_param_value(mrdrums_instance_t *inst, const char *key, char *buf,
     if (strcmp(key, "g_humanize_ms") == 0) return snprintf(buf, buf_len, "%.4f", inst->engine.humanize_ms);
     if (strcmp(key, "g_rand_seed") == 0) return snprintf(buf, buf_len, "%u", inst->engine.rand_seed);
     if (strcmp(key, "g_rand_loop_steps") == 0) return snprintf(buf, buf_len, "%d", inst->engine.rand_loop_steps);
+    if (strcmp(key, "ui_auto_select_pad") == 0) return snprintf(buf, buf_len, "%d", inst->ui_auto_select_pad);
     if (strcmp(key, "ui_current_pad") == 0) return snprintf(buf, buf_len, "%d", inst->ui_current_pad);
     if (strcmp(key, "ui_last_sample_dir") == 0) return snprintf(buf, buf_len, "%s", inst->ui_last_sample_dir);
 
@@ -643,6 +649,7 @@ static void apply_defaults(mrdrums_instance_t *inst) {
     }
 
     inst->ui_current_pad = clampi(inst->ui_current_pad, 1, 16);
+    inst->ui_auto_select_pad = clampi(inst->ui_auto_select_pad, 0, 1);
     inst->ui_last_sample_dir[0] = '\0';
 }
 
@@ -702,6 +709,7 @@ static void *v2_create_instance(const char *module_dir, const char *json_default
 
     snprintf(inst->module_dir, sizeof(inst->module_dir), "%s", module_dir ? module_dir : "");
     mrdrums_engine_init(&inst->engine);
+    inst->ui_auto_select_pad = 1;
     inst->ui_current_pad = 1;
     set_error(inst, NULL);
 
@@ -736,7 +744,7 @@ static void v2_on_midi(void *instance, const uint8_t *msg, int len, int source) 
     if (status == 0x90) {
         if (data2 > 0) {
             int ui_pad = ui_note_to_pad((int)data1);
-            if (ui_pad > 0) {
+            if (inst->ui_auto_select_pad && ui_pad > 0) {
                 inst->ui_current_pad = ui_pad;
             }
             mrdrums_engine_note_on(&inst->engine, (int)data1, (int)data2);
@@ -996,7 +1004,7 @@ static int build_ui_hierarchy(mrdrums_instance_t *inst, char *buf, int buf_len) 
                 "},"
                 "\"pad_settings\":{"
                     "\"name\":\"Pad Settings\","
-                    "\"params\":[\"ui_current_pad\",\"pad_sample_path\",\"pad_vol\",\"pad_pan\",\"pad_tune\",\"pad_start\",\"pad_attack_ms\",\"pad_decay_ms\",\"pad_choke_group\",\"pad_mode\",\"pad_rand_pan_amt\",\"pad_rand_vol_amt\",\"pad_rand_decay_amt\",\"pad_chance_pct\"],"
+                    "\"params\":[\"ui_auto_select_pad\",\"ui_current_pad\",\"pad_sample_path\",\"pad_vol\",\"pad_pan\",\"pad_tune\",\"pad_start\",\"pad_attack_ms\",\"pad_decay_ms\",\"pad_choke_group\",\"pad_mode\",\"pad_rand_pan_amt\",\"pad_rand_vol_amt\",\"pad_rand_decay_amt\",\"pad_chance_pct\"],"
                     "\"knobs\":[\"pad_vol\",\"pad_pan\",\"pad_tune\",\"pad_start\",\"pad_attack_ms\",\"pad_decay_ms\",\"pad_choke_group\",\"pad_mode\"]"
                 "}"
             "}"

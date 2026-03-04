@@ -212,6 +212,18 @@ static int find_voice_slot(mrdrums_engine_t *engine) {
     return oldest_idx;
 }
 
+static float apply_velocity_curve(float vel, int vel_curve) {
+    vel = clampf(vel, 0.0f, 1.0f);
+    switch (vel_curve) {
+        case 1:  /* soft */
+            return sqrtf(vel);
+        case 2:  /* hard */
+            return vel * vel;
+        default: /* linear */
+            return vel;
+    }
+}
+
 void mrdrums_engine_note_on(mrdrums_engine_t *engine, int note, int velocity) {
     if (!engine) return;
 
@@ -248,7 +260,7 @@ void mrdrums_engine_note_on(mrdrums_engine_t *engine, int note, int velocity) {
     float src_to_out = (float)pad->sample_rate / (float)engine->sample_rate;
     v->sample_inc = clampf(src_to_out * pitch_ratio, 0.05f, 8.0f);
 
-    float vel = clampf((float)velocity / 127.0f, 0.0f, 1.0f);
+    float vel = apply_velocity_curve((float)velocity / 127.0f, engine->vel_curve);
     float gain = vel * clampf(pad->vol, 0.0f, 1.0f) * engine->master_vol;
 
     float pan = clampf(pad->pan, -1.0f, 1.0f);
