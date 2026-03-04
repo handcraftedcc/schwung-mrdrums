@@ -71,6 +71,7 @@ typedef struct {
     char module_dir[512];
     char last_error[256];
     int ui_current_pad;
+    char ui_last_sample_dir[512];
 
     mrdrums_engine_t engine;
     char pad_sample_paths[MRDRUMS_ENGINE_PAD_COUNT][512];
@@ -486,6 +487,10 @@ static int set_param_value(mrdrums_instance_t *inst, const char *key, const char
         inst->ui_current_pad = clampi(atoi(val), 1, 16);
         return 1;
     }
+    if (strcmp(key, "ui_last_sample_dir") == 0) {
+        snprintf(inst->ui_last_sample_dir, sizeof(inst->ui_last_sample_dir), "%s", val);
+        return 1;
+    }
 
     const char *alias_suffix = resolve_current_pad_alias_suffix(key);
     if (alias_suffix) {
@@ -566,6 +571,7 @@ static int get_param_value(mrdrums_instance_t *inst, const char *key, char *buf,
     if (strcmp(key, "g_rand_seed") == 0) return snprintf(buf, buf_len, "%u", inst->engine.rand_seed);
     if (strcmp(key, "g_rand_loop_steps") == 0) return snprintf(buf, buf_len, "%d", inst->engine.rand_loop_steps);
     if (strcmp(key, "ui_current_pad") == 0) return snprintf(buf, buf_len, "%d", inst->ui_current_pad);
+    if (strcmp(key, "ui_last_sample_dir") == 0) return snprintf(buf, buf_len, "%s", inst->ui_last_sample_dir);
 
     const char *alias_suffix = resolve_current_pad_alias_suffix(key);
     if (alias_suffix) {
@@ -632,6 +638,7 @@ static void apply_defaults(mrdrums_instance_t *inst) {
     }
 
     inst->ui_current_pad = clampi(inst->ui_current_pad, 1, 16);
+    inst->ui_last_sample_dir[0] = '\0';
 }
 
 static void apply_state_json(mrdrums_instance_t *inst, const char *json) {
@@ -676,6 +683,11 @@ static void apply_state_json(mrdrums_instance_t *inst, const char *json) {
                 }
             }
         }
+    }
+
+    char last_dir[512];
+    if (json_get_string(json, "ui_last_sample_dir", last_dir, sizeof(last_dir)) == 0) {
+        set_param_value(inst, "ui_last_sample_dir", last_dir);
     }
 }
 
@@ -796,6 +808,8 @@ static int build_state_json(mrdrums_instance_t *inst, char *buf, int buf_len) {
     for (int i = 0; i < global_count; i++) {
         append_state_key_value(inst, buf, buf_len, &offset, globals[i].key, globals[i].type, &is_first);
     }
+
+    append_state_key_value(inst, buf, buf_len, &offset, "ui_last_sample_dir", "filepath", &is_first);
 
     int field_count = 0;
     const mrdrums_pad_field_desc_t *fields = mrdrums_pad_fields(&field_count);

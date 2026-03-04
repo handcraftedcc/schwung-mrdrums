@@ -93,6 +93,34 @@ function getPadControls() {
     return state.padControlPage === PAD_PAGE_MAIN ? PAD_MAIN_CONTROLS : PAD_RANDOM_CONTROLS;
 }
 
+function directoryFromFilepath(path) {
+    if (!path) return '';
+    const slash = path.lastIndexOf('/');
+    if (slash <= 0) return '';
+    return path.slice(0, slash);
+}
+
+function resolveFileBrowserStartDir(key) {
+    const currentPath = getParamRaw(key);
+    const currentDir = directoryFromFilepath(currentPath);
+    if (currentDir) return currentDir;
+
+    const lastDir = getParamRaw('ui_last_sample_dir');
+    if (lastDir) return lastDir;
+
+    return '/data/UserData/UserLibrary/Samples';
+}
+
+function rememberLastSampleDir() {
+    const samplePath = getParamRaw(activePadKey('sample_path'));
+    const sampleDir = directoryFromFilepath(samplePath);
+    if (!sampleDir) return;
+
+    if (getParamRaw('ui_last_sample_dir') !== sampleDir) {
+        setParamRaw('ui_last_sample_dir', sampleDir);
+    }
+}
+
 function formatValue(control, raw) {
     if (control.type === 'filepath') {
         if (!raw) return '--';
@@ -114,7 +142,7 @@ function adjustControl(control, key, delta) {
 
     if (control.type === 'filepath') {
         if (delta > 0 && typeof host_open_file_browser === 'function') {
-            host_open_file_browser(key, '.wav', '/data/UserData/UserLibrary/Samples');
+            host_open_file_browser(key, '.wav', resolveFileBrowserStartDir(key));
         }
         if (delta < 0) {
             setParamRaw(key, '');
@@ -296,6 +324,8 @@ globalThis.tick = function tick() {
             state.needsRedraw = true;
         }
     }
+
+    rememberLastSampleDir();
 
     if (!state.needsRedraw) return;
     redraw();
