@@ -6,6 +6,7 @@
   "description": "16-pad drum sampler for Move Anything",
   "author": "move-anything contributors",
   "license": "MIT",
+  "ui": "ui.js",
   "dsp": "dsp.so",
   "api_version": 2,
   "defaults": {
