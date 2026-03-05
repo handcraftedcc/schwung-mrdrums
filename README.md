@@ -2,11 +2,14 @@
 
 `MrDrums` is a 16-pad drum sampler module for [Move Anything](https://github.com/charlesvestal/move-anything).
 
-This branch is actively being converted from a copied scaffold. The target UX is:
+Current behavior:
 
 - Top-level pages: `Global` and `Pad Settings`
-- Dynamic pad editing: hit pads to switch current pad while staying on the same focused parameter
-- Fully persisted keys per pad (`p01_*` .. `p16_*`) plus global keys (`g_*`)
+- Dynamic pad editing with notes `36..51` (`p01_*` .. `p16_*`)
+- Fully persisted per-pad and global parameters
+- File browser live preview with cancel-to-restore / select-to-commit
+- `Auto Select` toggle to lock editing to the current pad while playing
+- Global humanize timing, velocity curve, and randomization controls
 
 ## Build
 

@@ -7,15 +7,16 @@
         "16-pad drum sampler",
         "for Move Anything.",
         "",
-        "Each pad keeps its",
-        "own stored params."
+        "Pads map to notes",
+        "36..51 and keep",
+        "their own params."
       ]
     },
     {
       "title": "Pages",
       "lines": [
         "Global:",
-        "master settings",
+        "master + timing",
         "",
         "Pad Settings:",
         "edit current pad",
@@ -30,8 +31,8 @@
         "(notes 36..51)",
         "to switch target pad.",
         "",
-        "Focus row stays",
-        "on same parameter."
+        "Auto Select off",
+        "locks current pad."
       ]
     },
     {
@@ -40,7 +41,9 @@
         "Per-pad sample uses",
         "filepath browser.",
         "",
-        "WAV files only."
+        "Live preview while",
+        "browsing. Back",
+        "restores original."
       ]
     }
   ]
