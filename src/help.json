@@ -8,42 +8,104 @@
         "for Move Anything.",
         "",
         "Pads map to notes",
-        "36..51 and keep",
-        "their own params."
+        "36..51.",
+        "",
+        "No sound until a",
+        "pad Sample is set."
       ]
     },
     {
-      "title": "Pages",
-      "lines": [
-        "Global:",
-        "master + timing",
-        "",
-        "Pad Settings:",
-        "edit current pad",
-        "without menu diving"
+      "title": "Setup",
+      "children": [
+        {
+          "title": "Sample",
+          "lines": [
+            "Open Pad Settings,",
+            "select Sample.",
+            "",
+            "Choose .wav from:",
+            "/data/UserData/",
+            "UserLibrary/",
+            "Samples"
+          ]
+        },
+        {
+          "title": "Browse Behavior",
+          "lines": [
+            "Live preview while",
+            "browsing files.",
+            "",
+            "Back restores",
+            "previous sample.",
+            "Select commits."
+          ]
+        }
       ]
     },
     {
-      "title": "Pad Editing",
+      "title": "Global",
       "lines": [
-        "On Pad Settings:",
-        "hit pads 1..16",
-        "(notes 36..51)",
-        "to switch target pad.",
-        "",
-        "Auto Select off",
-        "locks current pad."
+        "Master Vol:",
+        "overall level",
+        "Polyphony:",
+        "active voice cap",
+        "Vel Curve:",
+        "linear/soft/hard",
+        "Humanize:",
+        "timing random ms",
+        "Random Seed:",
+        "static random seed",
+        "Rand Loop Steps:",
+        "random loop length"
       ]
     },
     {
-      "title": "Samples",
+      "title": "Pad Settings",
       "lines": [
-        "Per-pad sample uses",
-        "filepath browser.",
+        "Auto Select:",
+        "switch pad from",
+        "incoming notes",
         "",
-        "Live preview while",
-        "browsing. Back",
-        "restores original."
+        "Current Pad:",
+        "edit target 1..16",
+        "",
+        "Pad controls are",
+        "stored per pad."
+      ]
+    },
+    {
+      "title": "Pad Controls",
+      "lines": [
+        "Sample, Vol, Pan,",
+        "Tune, Start,",
+        "Attack, Decay,",
+        "Choke, Mode",
+        "",
+        "Rand Pan/Vol/Dec,",
+        "Chance"
+      ]
+    },
+    {
+      "title": "Tips",
+      "lines": [
+        "For live tweaks,",
+        "set Auto Select",
+        "to off.",
+        "",
+        "Use Random Seed",
+        "for repeatable",
+        "random behavior."
+      ]
+    },
+    {
+      "title": "Disclaimer",
+      "lines": [
+        "Developed with",
+        "AI assistance.",
+        "",
+        "Design + release",
+        "decisions are",
+        "human-reviewed."
       ]
     }
   ]
