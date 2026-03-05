@@ -1,6 +1,6 @@
-# Move Anything - mrdrums Module
+# Move Anything - MrDrums Module
 
-`mrdrums` is a 16-pad drum sampler module for [Move Anything](https://github.com/charlesvestal/move-anything).
+`MrDrums` is a 16-pad drum sampler module for [Move Anything](https://github.com/charlesvestal/move-anything).
 
 This branch is actively being converted from a copied scaffold. The target UX is:
 

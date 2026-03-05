@@ -302,6 +302,16 @@ void mrdrums_engine_note_on(mrdrums_engine_t *engine, int note, int velocity) {
         v->release_inc = 1.0f / release_samples;
     }
 
+    v->start_delay_samples = 0;
+    if (engine->humanize_ms > 0.0f) {
+        float max_delay = engine->humanize_ms * 0.001f * (float)engine->sample_rate;
+        if (max_delay > 0.0f) {
+            int max_delay_samples = (int)max_delay;
+            int delay = (int)(rand01(&rng) * (float)(max_delay_samples + 1));
+            v->start_delay_samples = clampi(delay, 0, max_delay_samples);
+        }
+    }
+
     engine->rng_state = rng;
 }
 
@@ -357,6 +367,11 @@ void mrdrums_engine_render(mrdrums_engine_t *engine, float *out_left, float *out
 
         for (int i = 0; i < frames; i++) {
             if (!v->active) break;
+
+            if (v->start_delay_samples > 0) {
+                v->start_delay_samples--;
+                continue;
+            }
 
             if (v->sample_pos >= (float)(v->sample_len - 1)) {
                 v->active = 0;

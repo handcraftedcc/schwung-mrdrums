@@ -1025,7 +1025,7 @@ static int build_ui_hierarchy(mrdrums_instance_t *inst, char *buf, int buf_len) 
         "{"
             "\"levels\":{"
                 "\"root\":{"
-                    "\"name\":\"mrdrums\","
+                    "\"name\":\"MrDrums\","
                     "\"params\":["
                         "{\"label\":\"Global\",\"level\":\"global\"},"
                         "{\"label\":\"Pad Settings\",\"level\":\"pad_settings\"}"
@@ -1053,7 +1053,7 @@ static int v2_get_param(void *instance, const char *key, char *buf, int buf_len)
     mrdrums_instance_t *inst = (mrdrums_instance_t *)instance;
     if (!inst || !key || !buf || buf_len <= 0) return -1;
 
-    if (strcmp(key, "name") == 0) return snprintf(buf, buf_len, "mrdrums");
+    if (strcmp(key, "name") == 0) return snprintf(buf, buf_len, "MrDrums");
     if (strcmp(key, "state") == 0) return build_state_json(inst, buf, buf_len);
     if (strcmp(key, "chain_params") == 0) return build_chain_params_json(inst, buf, buf_len);
     if (strcmp(key, "ui_hierarchy") == 0) return build_ui_hierarchy(inst, buf, buf_len);

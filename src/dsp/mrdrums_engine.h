@@ -60,6 +60,7 @@ typedef struct {
     float release_inc;
     float gain_l;
     float gain_r;
+    int start_delay_samples;
 } mrdrums_voice_t;
 
 typedef struct {

@@ -1,4 +1,4 @@
-/* mrdrums semi-custom UI with dynamic per-pad bindings */
+/* MrDrums semi-custom UI with dynamic per-pad bindings */
 
 const PAD_NOTE_MIN = 36;
 const PAD_NOTE_MAX = 51;
@@ -221,7 +221,7 @@ function drawLine(y, text, selected) {
 }
 
 function drawGlobalPage() {
-    print(2, 2, 'mrdrums - Global', 2);
+    print(2, 2, 'MrDrums - Global', 2);
     for (let i = 0; i < GLOBAL_CONTROLS.length; i++) {
         const c = GLOBAL_CONTROLS[i];
         drawLine(16 + i * 10, `${c.label}: ${formatValue(c, getParamRaw(c.key))}`, i === state.selectedGlobalIndex);
@@ -230,7 +230,7 @@ function drawGlobalPage() {
 }
 
 function drawPadPage() {
-    print(2, 2, 'mrdrums - Pad Settings', 2);
+    print(2, 2, 'MrDrums - Pad Settings', 2);
     print(2, 14, `Current pad: ${state.currentPad}`, 1);
 
     const sampleKey = activePadKey('sample_path');
