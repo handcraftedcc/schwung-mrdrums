@@ -1,6 +1,6 @@
-# Move Anything - MrDrums Module
+# Schwung - MrDrums Module
 
-`MrDrums` is a 16-pad drum sampler module for [Move Anything](https://github.com/charlesvestal/move-anything).
+`MrDrums` is a 16-pad drum sampler module for [Schwung](https://github.com/charlesvestal/move-anything).
 
 MrDrums gives you 16 pads with independent sample paths and per-pad controls for gain, pan, tune, start, envelopes, choke, chance, and randomization.
 
@@ -36,7 +36,7 @@ By default, all pad sample paths are empty, so MrDrums is silent until you set a
 
 ## Prerequisites
 
-- [Move Anything](https://github.com/charlesvestal/move-anything) installed on your Ableton Move
+- [Schwung](https://github.com/charlesvestal/move-anything) installed on your Ableton Move
 - WAV files available on device (recommended path below)
 
 ## Requirements
@@ -90,7 +90,7 @@ For pad `Sample`:
 
 ### Module Store (recommended)
 
-Install `MrDrums` from Move Anything's Module Store.
+Install `MrDrums` from Schwung's Module Store.
 
 ### Build from Source
 
@@ -106,10 +106,10 @@ cd move-anything-mrdrums
 Install target:
 
 ```text
-/data/UserData/move-anything/modules/sound_generators/mrdrums/
+/data/UserData/schwung/modules/sound_generators/mrdrums/
 ```
 
-Restart Move Anything after install.
+Restart Schwung after install.
 
 ## Current Limitations
 
@@ -118,7 +118,7 @@ Restart Move Anything after install.
 
 ## AI Assistance Disclaimer
 
-This module is part of Move Everything and was developed with AI assistance, including Claude, Codex, and other AI assistants.
+This module is part of Schwung and was developed with AI assistance, including Claude, Codex, and other AI assistants.
 
 All architecture, implementation, and release decisions are reviewed by human maintainers.
 AI-assisted content may still contain errors, so please validate functionality, security, and license compatibility before production use.
@@ -138,5 +138,5 @@ AI-assisted content may still contain errors, so please validate functionality, 
 Install target:
 
 ```text
-/data/UserData/move-anything/modules/sound_generators/mrdrums/
+/data/UserData/schwung/modules/sound_generators/mrdrums/
 ```

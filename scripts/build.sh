@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Build mrdrums module for Move Anything (ARM64)
+# Build mrdrums module for Schwung (ARM64)
 #
 # Uses Docker for cross-compilation unless CROSS_PREFIX is provided.
 set -e

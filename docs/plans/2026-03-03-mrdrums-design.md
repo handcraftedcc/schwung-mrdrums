@@ -1,7 +1,7 @@
 # mrdrums Design
 
 ## Goal
-Build a new Move Anything module named `mrdrums`: a 16-pad drum sampler with fast pad-centric editing, strict persisted parameter keys, and a semi-custom UI that dynamically binds controls to the currently selected pad.
+Build a new Schwung module named `mrdrums`: a 16-pad drum sampler with fast pad-centric editing, strict persisted parameter keys, and a semi-custom UI that dynamically binds controls to the currently selected pad.
 
 ## Scope
 - Replace copied `granny` identity, docs, build/install packaging, metadata, and DSP/UI behavior with `mrdrums`.

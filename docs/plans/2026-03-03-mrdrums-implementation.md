@@ -47,7 +47,7 @@ Expected: FAIL because copied granny metadata still exists.
 Update metadata/script/doc strings:
 - `granny-grain` -> `mrdrums`
 - `Granny` -> `mrdrums`
-- install destination -> `/data/UserData/move-anything/modules/sound_generators/mrdrums`
+- install destination -> `/data/UserData/schwung/modules/sound_generators/mrdrums`
 - tarball -> `dist/mrdrums-module.tar.gz`
 
 **Step 4: Run test to verify it passes**
