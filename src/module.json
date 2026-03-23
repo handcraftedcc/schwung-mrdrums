@@ -3,7 +3,7 @@
   "name": "MrDrums",
   "abbrev": "MRD",
   "version": "0.0.1",
-  "description": "16-pad drum sampler for Move Anything",
+  "description": "16-pad drum sampler for Schwung",
   "author": "move-anything contributors",
   "license": "MIT",
   "ui": "ui.js",
