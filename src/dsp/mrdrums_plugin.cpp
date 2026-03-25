@@ -534,6 +534,12 @@ static int set_param_value(mrdrums_instance_t *inst, const char *key, const char
         if (!mrdrums_make_pad_key(clampi(inst->ui_current_pad, 1, 16), alias_suffix, target_key, sizeof(target_key))) {
             return 0;
         }
+        if (strcmp(alias_suffix, "start") == 0) {
+            float pct = clampf((float)atof(val), 0.0f, 100.0f);
+            char norm_buf[64];
+            snprintf(norm_buf, sizeof(norm_buf), "%.6g", pct * 0.01f);
+            return set_param_value(inst, target_key, norm_buf);
+        }
         return set_param_value(inst, target_key, val);
     }
 
@@ -616,6 +622,12 @@ static int get_param_value(mrdrums_instance_t *inst, const char *key, char *buf,
         char target_key[64];
         if (!mrdrums_make_pad_key(clampi(inst->ui_current_pad, 1, 16), alias_suffix, target_key, sizeof(target_key))) {
             return -1;
+        }
+        if (strcmp(alias_suffix, "start") == 0) {
+            char norm_buf[64];
+            if (get_param_value(inst, target_key, norm_buf, sizeof(norm_buf)) < 0) return -1;
+            float pct = clampf((float)atof(norm_buf) * 100.0f, 0.0f, 100.0f);
+            return snprintf(buf, buf_len, "%.4f", pct);
         }
         return get_param_value(inst, target_key, buf, buf_len);
     }
@@ -966,13 +978,9 @@ static int build_chain_params_json(mrdrums_instance_t *inst, char *buf, int buf_
             const char *type = strcmp(f->type, "int") == 0 ? "int" : "float";
             if (strcmp(f->suffix, "start") == 0) {
                 offset += snprintf(buf + offset, buf_len - offset,
-                                   "{\"key\":\"%s\",\"name\":\"%s\",\"type\":\"%s\",\"ui_type\":\"wav_position\",\"mode\":\"start\",\"filepath_param\":\"pad_sample_path\",\"display_unit\":\"percent\",\"min\":%g,\"max\":%g,\"step\":%g,\"shift_increment_multiplier\":0.25}",
+                                   "{\"key\":\"%s\",\"name\":\"%s\",\"type\":\"wav_position\",\"mode\":\"start\",\"filepath_param\":\"pad_sample_path\",\"display_unit\":\"percent\",\"min\":0,\"max\":100,\"step\":1,\"shift_increment_multiplier\":0.25}",
                                    key,
-                                   f->name,
-                                   type,
-                                   f->min_val,
-                                   f->max_val,
-                                   f->step > 0.0f ? f->step : 1.0f);
+                                   f->name);
             } else {
                 offset += snprintf(buf + offset, buf_len - offset,
                                    "{\"key\":\"%s\",\"name\":\"%s\",\"type\":\"%s\",\"min\":%g,\"max\":%g,\"step\":%g}",

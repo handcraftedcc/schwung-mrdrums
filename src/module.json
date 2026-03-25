@@ -260,7 +260,20 @@
             { "key": "pad_vol", "visible_if": { "param": "ui_pad_page", "equals": "main" } },
             { "key": "pad_pan", "visible_if": { "param": "ui_pad_page", "equals": "main" } },
             { "key": "pad_tune", "visible_if": { "param": "ui_pad_page", "equals": "main" } },
-            { "key": "pad_start", "visible_if": { "param": "ui_pad_page", "equals": "main" } },
+            {
+              "key": "pad_start",
+              "type": "wav_position",
+              "min": 0,
+              "max": 100,
+              "step": 1,
+              "options": {
+                "display_unit": "percent",
+                "mode": "trim_front",
+                "filepath_param": "pad_sample_path",
+                "shift_increment_multiplier": 0.25
+              },
+              "visible_if": { "param": "ui_pad_page", "equals": "main" }
+            },
             { "key": "pad_attack_ms", "visible_if": { "param": "ui_pad_page", "equals": "main" } },
             { "key": "pad_decay_ms", "visible_if": { "param": "ui_pad_page", "equals": "main" } },
             { "key": "pad_choke_group", "visible_if": { "param": "ui_pad_page", "equals": "main" } },
