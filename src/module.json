@@ -2,7 +2,7 @@
   "id": "mrdrums",
   "name": "MrDrums",
   "abbrev": "MRD",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "16-pad drum sampler for Schwung",
   "author": "move-anything contributors",
   "license": "MIT",
